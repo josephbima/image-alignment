@@ -3,6 +3,14 @@ import numpy as np
 import cv2
 import argparse
 
+def sampleImage(img, ratio):
+    sampled_image = cv2.resize(img,  # original image
+                           (0, 0),  # set fx and fy, not the final size
+                           fx=ratio,
+                           fy=ratio,
+                           interpolation=cv2.INTER_NEAREST)
+
+    return sampled_image
 
 def cropImage(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -14,7 +22,6 @@ def cropImage(img):
     return cropped
 
 def alignImages(config):
-
     print(config.ref)
 
     im1 = cv2.imread(config.ref, cv2.IMREAD_COLOR)
@@ -24,11 +31,17 @@ def alignImages(config):
     im1Gray = cv2.cvtColor(im1, cv2.COLOR_BGR2GRAY)
     im2Gray = cv2.cvtColor(im2, cv2.COLOR_BGR2GRAY)
 
+    # Downsampling simulation
+    # Simulate low quality image 0.25x
+    im2Gray = sampleImage(im2Gray, 0.25)
+    im2Gray = sampleImage(im2Gray, 4)
+
+    cv2.imshow("graylow", im2Gray)
+
     # Detect ORB features and compute descriptors.
     orb = cv2.ORB_create(config.matches)
     keypoints1, descriptors1 = orb.detectAndCompute(im1Gray, None)
     keypoints2, descriptors2 = orb.detectAndCompute(im2Gray, None)
-
 
     # Match features.
     matcher = cv2.DescriptorMatcher_create(cv2.DESCRIPTOR_MATCHER_BRUTEFORCE_HAMMING)
@@ -45,7 +58,7 @@ def alignImages(config):
     if config.debug:
 
         # Draw top matches
-        imMatches = cv2.drawMatches(im1, keypoints1, im2, keypoints2, matches, None)
+        imMatches = cv2.drawMatches(im1, keypoints1, im2Gray, keypoints2, matches, None)
 
         im1_kp = cv2.drawKeypoints(im1Gray, keypoints1, None, flags=None)
         im2_kp = cv2.drawKeypoints(im2Gray, keypoints2, None, flags=None)
@@ -81,7 +94,7 @@ def alignImages(config):
     cv2.imwrite(config.out, cropped_img)
 
     imR = cv2.resize(cropped_img, (600, 900))  # Resize image
-    cv2.imshow("resized", imR)
+    cv2.imshow(config.out, imR)
     cv2.waitKey(0)
 
     print(f'Saving image as {config.out}')
