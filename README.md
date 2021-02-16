@@ -27,3 +27,15 @@ python main.py --ref vit2.jpg --algn vit1.jpg --out align_vit.jpg --matches 200 
 
 ```
 
+
+# Updates
+
+### Test 1: Common Area of Two Similar Images
+
+A test of finding the common area for two similar images. The images are of the same size and somewhat same quality. 
+The parameters used are 1000 matches and 0.3 top matches.
+
+Visually, the results were good and can move on to more tests. 
+
+
+

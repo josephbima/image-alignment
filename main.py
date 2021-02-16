@@ -4,7 +4,18 @@ import cv2
 import argparse
 
 
+def cropImage(img):
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    _, thresh = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
+    contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    cnt = contours[0]
+    x, y, w, h = cv2.boundingRect(cnt)
+    cropped = img[y:y + h, x:x + w]
+    return cropped
+
 def alignImages(config):
+
+    print(config.ref)
 
     im1 = cv2.imread(config.ref, cv2.IMREAD_COLOR)
     im2 = cv2.imread(config.algn, cv2.IMREAD_COLOR)
@@ -65,12 +76,13 @@ def alignImages(config):
     height, width, channels = im2.shape
     im1Reg = cv2.warpPerspective(im1, h, (width, height))
 
-    imR = cv2.resize(im1Reg, (600, 900))  # Resize image
+    cropped_img = cropImage(im1Reg)
+
+    cv2.imwrite(config.out, cropped_img)
+
+    imR = cv2.resize(cropped_img, (600, 900))  # Resize image
     cv2.imshow("resized", imR)
     cv2.waitKey(0)
-
-
-    cv2.imwrite(config.out, im1Reg)
 
     print(f'Saving image as {config.out}')
     print(f'Homography: {h}')
