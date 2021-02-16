@@ -27,16 +27,17 @@ def alignImages(config):
     im1 = cv2.imread(config.ref, cv2.IMREAD_COLOR)
     im2 = cv2.imread(config.algn, cv2.IMREAD_COLOR)
 
+    im2 = sampleImage(im2, 0.25)
+    im2 = sampleImage(im2, 4)
+
     # Convert images to grayscale
     im1Gray = cv2.cvtColor(im1, cv2.COLOR_BGR2GRAY)
     im2Gray = cv2.cvtColor(im2, cv2.COLOR_BGR2GRAY)
 
     # Downsampling simulation
     # Simulate low quality image 0.25x
-    im2Gray = sampleImage(im2Gray, 0.25)
-    im2Gray = sampleImage(im2Gray, 4)
 
-    cv2.imshow("graylow", im2Gray)
+    # cv2.imshow("graylow", im2)
 
     # Detect ORB features and compute descriptors.
     orb = cv2.ORB_create(config.matches)
