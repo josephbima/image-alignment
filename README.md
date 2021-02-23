@@ -4,24 +4,7 @@ Image alignment and cropping using openCV.
 
 # Updates
 
-### Test 1: Common Area of Two Similar Images
-
-A test of finding the common area for two similar images. The images are of the same size and somewhat same quality. 
-The parameters used are 10000 matches and 0.3 top matches.
-
-Visually, the results were good and can move on to more tests. 
-
-![House 1](./data/house_1.jpg "Ref 1")
-![House 2](./data/house_2.jpg "Ref 2")
-![House Common](./results_1/house_al.jpg "Ref 2")
-
-![Park 1](./data/park_1.jpg "Ref 1")
-![Park 2](./data/park_2.jpg "Ref 2")
-![Park Common](./results_1/park_al.jpg "Ref 2")
-
-##
-
-### Test 2: Common Area of a HR and a LR Images
+### Update 2: Common Area of a HR and a LR Images
 
 Test for common area between one high resolution image and one low resolution one. One image is manually downsampled 
 to 0.25 size to simulate real life data. The process are as follows:
@@ -47,6 +30,25 @@ And an example where the results is just unintelligble warping.
 ![Kitchen 1](./data/park_1.jpg "Ref 1")
 ![Kitchen 2](./downsampled_025/park_al.jpg_downsampled.jpg "Ref 2")
 ![Kitchen Common](./results_2/park_al.jpg "Ref 2")
+
+### Update 1: Common Area of Two Similar Images
+
+A test of finding the common area for two similar images. The images are of the same size and somewhat same quality. 
+The parameters used are 10000 matches and 0.3 top matches.
+
+Visually, the results were good and can move on to more tests. 
+
+![House 1](./data/house_1.jpg "Ref 1")
+![House 2](./data/house_2.jpg "Ref 2")
+![House Common](./results_1/house_al.jpg "Ref 2")
+
+![Park 1](./data/park_1.jpg "Ref 1")
+![Park 2](./data/park_2.jpg "Ref 2")
+![Park Common](./results_1/park_al.jpg "Ref 2")
+
+##
+
+
 ### Usage
 
 ```

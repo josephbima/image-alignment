@@ -2,24 +2,8 @@ from __future__ import print_function
 import numpy as np
 import cv2
 import argparse
+from utils import sampleImage, removeBlackBorders
 
-def sampleImage(img, ratio):
-    sampled_image = cv2.resize(img,  # original image
-                           (0, 0),  # set fx and fy, not the final size
-                           fx=ratio,
-                           fy=ratio,
-                           interpolation=cv2.INTER_NEAREST)
-
-    return sampled_image
-
-def cropImage(img):
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    _, thresh = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
-    contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    cnt = contours[0]
-    x, y, w, h = cv2.boundingRect(cnt)
-    cropped = img[y:y + h, x:x + w]
-    return cropped
 
 def alignImages(config):
     print(config.ref)
@@ -27,8 +11,7 @@ def alignImages(config):
     im1 = cv2.imread(config.ref, cv2.IMREAD_COLOR)
     im2 = cv2.imread(config.algn, cv2.IMREAD_COLOR)
 
-    im2 = sampleImage(im2, 0.25)
-    im2 = sampleImage(im2, 4)
+    im2 = sampleImage(im2, config.ratio)
 
     # Convert images to grayscale
     im1Gray = cv2.cvtColor(im1, cv2.COLOR_BGR2GRAY)
@@ -90,12 +73,16 @@ def alignImages(config):
     height, width, channels = im2.shape
     im1Reg = cv2.warpPerspective(im1, h, (width, height))
 
-    cropped_img = cropImage(im1Reg)
+    cv2.imshow('config.out', im1Reg)
+    cv2.imwrite(config.out, im1Reg)
 
-    cv2.imwrite(config.out, cropped_img)
+    cropped_img = removeBlackBorders(im1Reg)
 
-    imR = cv2.resize(cropped_img, (600, 900))  # Resize image
-    cv2.imshow(config.out, imR)
+    # cv2.imwrite(config.out, cropped_img)
+    #
+    # imR = cv2.resize(cropped_img, (600, 900))  # Resize image
+    # cv2.imshow(config.out, imR)
+
     cv2.waitKey(0)
 
     print(f'Saving image as {config.out}')
@@ -105,6 +92,7 @@ def alignImages(config):
 
 
 if __name__ == '__main__':
+
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--ref', type=str, default='vit2.jpg')
@@ -113,6 +101,8 @@ if __name__ == '__main__':
     parser.add_argument('--matches', type=int, default=200)
     parser.add_argument('--top', type=float, default=0.15)
     parser.add_argument('--debug', type=bool, default=False)
+    parser.add_argument('--ratio', type=int, default=1)
+
     config = parser.parse_args()
     print(config)
     alignImages(config)
