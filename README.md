@@ -44,9 +44,6 @@ Below are more results, first image is from algorithm and second image is the gr
 ![CP 3](./results_3/snow_al.jpg "Ref 1")
 ![CP 3](./3-dataset/snow_truth.jpg "Ref 1")
 
-![CP 3](./results_3/field_al.jpg "Ref 1")
-![CP 3](./3-dataset/field_truth.jpg "Ref 1")
-
 ![CP 3](./results_3/seaside_al.jpg "Ref 1")
 ![CP 3](./3-dataset/seaside_truth.jpg "Ref 1")
 
@@ -74,7 +71,6 @@ Below are more results, first image is from algorithm and second image is the gr
 ![CP 3](./results_3/mountain_al.jpg "Ref 1")
 ![CP 3](./3-dataset/mountain_truth.jpg "Ref 1")
 ##
-
 
 
 ### Update 2: Common Area of a HR and a LR Images
