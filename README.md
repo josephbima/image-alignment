@@ -13,6 +13,8 @@ I also downsampled the one image by 0.25 ratio and downsampled another one by 0.
 
 Here is the original image, and the three images its split to
 
+![CP 1](./3-dataset/3-illustration.jpg "Ref 1")
+
 ![CP Original](./3-dataset/cp.jpg "Ref 1")
 
 _Original Image_
