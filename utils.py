@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 def sampleImage(img, ratio):
     sampled_image = cv2.resize(img,  # original image
@@ -9,17 +10,10 @@ def sampleImage(img, ratio):
 
     return sampled_image
 
+
 def removeBlackBorders(img):
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    _, thresh = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
-    contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    cnt = contours[0]
-    x, y, w, h = cv2.boundingRect(cnt)
-
-    print(x,y,w,h)
-
-    cropped = img[y:y + h, x:x + w]
-    return cropped
+    y_nonzero, x_nonzero, _ = np.nonzero(img)
+    return img[np.min(y_nonzero):np.max(y_nonzero), np.min(x_nonzero):np.max(x_nonzero)]
 
 def imageCropper(img,x,xd,y,yd):
     crop_img = img[y:yd,x:xd]
@@ -56,9 +50,28 @@ def splitImagesIntoThree(img, name='img'):
 
     return
 
+def mse(imA, imB):
+    err = np.sum((imA.astype("float") - imB.astype("float")) ** 2)
+    err /= float(imA.shape[0] * imA.shape[1])
+
+    return err
+
+
 # names = ['beach', 'city', 'cp', 'desert', 'field', 'forest', 'hills', 'house', 'library', 'mountain', 'seaside', 'snow']
 #
 # for n in names:
 #     img = cv2.imread(f'./3-dataset/{n}.jpg', cv2.IMREAD_COLOR)
 #     crop = imageCropper(img,218,777,232,594)
 #     cv2.imwrite(f'{n}_truth.jpg', crop)
+#
+# im = cv2.imread('./results_3/city_al.jpg', cv2.IMREAD_COLOR)
+# cv2.imshow('ori', im)
+#
+# crop1 = crop(im)
+# cv2.imshow('crop', crop1)
+# cv2.waitKey(0)
+
+imgA = cv2.imread('./results_3/cp_al.jpg', cv2.IMREAD_COLOR)
+imgB = cv2.imread('./3-dataset/cp_truth.jpg', cv2.IMREAD_COLOR)
+
+print(mse(imgA,imgB))

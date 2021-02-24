@@ -18,8 +18,6 @@ def alignImages(config):
     im2Gray = cv2.cvtColor(im2, cv2.COLOR_BGR2GRAY)
 
     # Downsampling simulation
-    # Simulate low quality image 0.25x
-
     # cv2.imshow("graylow", im2)
 
     # Detect ORB features and compute descriptors.
@@ -73,15 +71,11 @@ def alignImages(config):
     height, width, channels = im2.shape
     im1Reg = cv2.warpPerspective(im1, h, (width, height))
 
-    cv2.imshow('config.out', im1Reg)
-    cv2.imwrite(config.out, im1Reg)
-
     cropped_img = removeBlackBorders(im1Reg)
 
-    # cv2.imwrite(config.out, cropped_img)
-    #
-    # imR = cv2.resize(cropped_img, (600, 900))  # Resize image
-    # cv2.imshow(config.out, imR)
+    cv2.imwrite(config.out, cropped_img)
+
+    cv2.imshow(config.out, cropped_img)
 
     cv2.waitKey(0)
 
