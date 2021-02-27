@@ -13,33 +13,35 @@ I also downsampled the one image by 0.25 ratio and downsampled another one by 0.
 
 Here is the original image, and the three images its split to
 
-![CP 1](./3-dataset/3-illustration.jpg "Ref 1")
-
-![CP Original](./3-dataset/cp.jpg "Ref 1")
+![CP 1](./graphics/3-illustration.jpg "Ref 1")
 
 _Original Image_
 
-![CP 1](./3-dataset/cp_1.jpg "Ref 1")
+![CP Original](./3-dataset/cp.jpg "Ref 1")
 
 _Normal quality image_
 
-![CP 2](./3-dataset/cp_2.jpg "Ref 1")
+![CP 1](./3-dataset/cp_1.jpg "Ref 1")
 
 _0.25 downsampled image_
 
-![CP 3](./3-dataset/cp_3.jpg "Ref 1")
+![CP 2](./3-dataset/cp_2.jpg "Ref 1")
 
 _0.5 downsampled image_
 
-And after the aligning image 1 and 2, and then the result into 3 this is the results we get:
+![CP 3](./3-dataset/cp_3.jpg "Ref 1")
 
-![CP 3](./results_3/cp_al.jpg "Ref 1")
+
+And after the aligning image 1 and 2, and then the result into 3 this is the results we get:
 
 _Result from algorithm_
 
-![CP 3](./3-dataset/cp_truth.jpg "Ref 1")
+![CP 3](./results_3/cp_al.jpg "Ref 1")
 
 _Ground truth_
+
+![CP 3](./3-dataset/cp_truth.jpg "Ref 1")
+
 
 Below are more results, first image is from algorithm and second image is the ground truth.
 

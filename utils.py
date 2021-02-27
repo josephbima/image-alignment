@@ -1,6 +1,13 @@
 import cv2
 import numpy as np
 
+def getRatio(imgA,imgB):
+    area_a = imgA.shape[1] * imgA.shape[0]
+    print(area_a)
+    area_b = imgB.shape[1] * imgB.shape[0]
+    print(area_b)
+    return area_a/area_b
+
 def sampleImage(img, ratio):
     sampled_image = cv2.resize(img,  # original image
                            (0, 0),  # set fx and fy, not the final size
@@ -70,8 +77,3 @@ def mse(imA, imB):
 # crop1 = crop(im)
 # cv2.imshow('crop', crop1)
 # cv2.waitKey(0)
-
-imgA = cv2.imread('./results_3/cp_al.jpg', cv2.IMREAD_COLOR)
-imgB = cv2.imread('./3-dataset/cp_truth.jpg', cv2.IMREAD_COLOR)
-
-print(mse(imgA,imgB))
