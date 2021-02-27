@@ -3,6 +3,10 @@ import os
 from utils import imageCropper, splitImagesIntoThree
 import cv2
 from main import alignImages
+from error_calculation import compare_errors
+import csv
+
+
 # creating object
 response = google_images_download.googleimagesdownload()
 
@@ -61,7 +65,7 @@ def downloadimages(query):
 #     else:
 #         continue
 
-
+#
 directory = r'./downloads/1200x800 images'
 for filename in os.listdir(directory):
     if filename.endswith(".jpg") or filename.endswith(".png"):
@@ -83,7 +87,7 @@ for filename in os.listdir(directory):
             'debug': False
         }
 
-        alignImages(config=config_1)
+        # alignImages(config=config_1) # Uncomment to test
 
         config_2 = {
             'ref': f'{output_12}',
@@ -100,8 +104,42 @@ for filename in os.listdir(directory):
         # print(output_12)
         # print(output_123)
 
-        alignImages(config=config_2)
+        # alignImages(config=config_2) # Uncomment to test
 
 
     else:
         continue
+#
+# # Error Calculation
+#
+directory = r'./downloads/1200x800 images'
+
+total_mse = 0
+total_ssim = 0
+i = 0
+
+csv_arr = [["ground_truth", "generated_img", "mse", "ssim"]]
+
+for filename in os.listdir(directory):
+    if filename.endswith(".jpg"):
+
+        imA = cv2.imread(f'./4-google-datasets/{str(filename)}_truth.jpg')
+        imB = cv2.imread(f'./results_4/{str(filename)}_al.jpg')
+
+        mse, s = compare_errors(imA, imB, title=filename)
+
+        total_mse += mse
+        total_ssim += s
+
+        csv_arr.append([f'{filename}_truth.jpg', f'{filename}_al.jpg', mse, s])
+        # break
+        i += 1
+
+with open('results_4/error_calculation.csv', 'w', newline='') as file:
+    writer = csv.writer(file)
+    for r in csv_arr:
+        writer.writerow(r)
+    writer.writerow(['total_average', 'total_average', total_mse / i, total_ssim / i])
+
+print(f'Mean mse: {total_mse / i}')
+print(f'Mean ssim: {total_ssim / i}')

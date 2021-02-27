@@ -7,10 +7,10 @@ import csv
 
 def compare_errors(im_truth, im_compare, title='Comparison'):
 
-    im_compare = cv2.resize(im_compare, (im_truth.shape[1], im_truth.shape[0]), interpolation = cv2.INTER_AREA)
+    im_compare_resized = cv2.resize(im_compare, (im_truth.shape[1], im_truth.shape[0]), interpolation = cv2.INTER_AREA)
 
-    mse = (mean_squared_error(im_truth,im_compare))
-    s = (ssim(im_truth,im_compare, multichannel = True))
+    mse = (mean_squared_error(im_truth,im_compare_resized))
+    s = (ssim(im_truth,im_compare_resized, multichannel = True))
 
     # setup the figure
     fig = plt.figure(title)
@@ -44,7 +44,7 @@ i = 0
 
 for label in labels:
     imA = cv2.imread(f'./3-dataset/{label}_truth.jpg')
-    imB = cv2.imread(f'{label}_al.jpg')
+    imB = cv2.imread(f'./results_3/{label}_al.jpg')
 
     mse,s = compare_errors(imA,imB, title=label)
 
@@ -54,11 +54,11 @@ for label in labels:
 
     csv_arr.append([f'./3-dataset/{label}_truth.jpg',f'./results_3/{label}_al.jpg', mse, s])
 
-with open('error-plots/error_calculation.csv', 'w', newline='') as file:
+with open('./results_3/error_calculation.csv', 'w', newline='') as file:
     writer = csv.writer(file)
     for r in csv_arr:
         writer.writerow(r)
-
+    writer.writerow(['total_average', 'total_average',total_mse/i,total_ssim/i ])
 
 print(f'Mean mse: {total_mse/i}') # 1082.118949977722
 print(f'Mean ssim: {total_ssim/i}') # 0.5135202796352917

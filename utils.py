@@ -41,7 +41,7 @@ def splitImagesIntoThree(img, name='img'):
     im3 = imageCropper(img, IM3_CONFIG[0], IM3_CONFIG[1], IM3_CONFIG[2], IM3_CONFIG[3])
 
     # Downsample images 2 and 3
-    im2 = sampleImage(im2, ratio=0.25)
+    im2 = sampleImage(im2, ratio=0.1)
     im3 = sampleImage(im3, ratio=0.5)
 
     # cv2.imshow('crop1', im1)
@@ -64,16 +64,16 @@ def mse(imA, imB):
     return err
 
 
-# names = ['beach', 'city', 'cp', 'desert', 'field', 'forest', 'hills', 'house', 'library', 'mountain', 'seaside', 'snow']
-#
-# for n in names:
-#     img = cv2.imread(f'./3-dataset/{n}.jpg', cv2.IMREAD_COLOR)
-#     crop = imageCropper(img,218,777,232,594)
-#     cv2.imwrite(f'{n}_truth.jpg', crop)
-#
-# im = cv2.imread('./results_3/city_al.jpg', cv2.IMREAD_COLOR)
-# cv2.imshow('ori', im)
-#
-# crop1 = crop(im)
-# cv2.imshow('crop', crop1)
-# cv2.waitKey(0)
+names = ['beach', 'city', 'cp', 'desert', 'field', 'forest', 'hills', 'house', 'library', 'mountain', 'seaside', 'snow']
+
+for n in names:
+    img = cv2.imread(f'./3-dataset/{n}.jpg', cv2.IMREAD_COLOR)
+    crop = imageCropper(img,218,777,232,594)
+    cv2.imwrite(f'{n}_truth.jpg', crop)
+
+im = cv2.imread('./results_3/city_al.jpg', cv2.IMREAD_COLOR)
+cv2.imshow('ori', im)
+
+crop1 = crop(im)
+cv2.imshow('crop', crop1)
+cv2.waitKey(0)

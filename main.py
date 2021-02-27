@@ -6,10 +6,10 @@ from utils import sampleImage, removeBlackBorders, getRatio
 
 
 def alignImages(config):
-    print(config['ref'])
+    print(config.ref)
 
-    im1 = cv2.imread(config['ref'], cv2.IMREAD_COLOR)
-    im2 = cv2.imread(config['algn'], cv2.IMREAD_COLOR)
+    im1 = cv2.imread(config.ref, cv2.IMREAD_COLOR)
+    im2 = cv2.imread(config.algn, cv2.IMREAD_COLOR)
 
     print(im1.shape)
     print(im2.shape)
@@ -30,7 +30,7 @@ def alignImages(config):
     # cv2.imshow("graylow", im2)
 
     # Detect ORB features and compute descriptors.
-    orb = cv2.ORB_create(config['matches'])
+    orb = cv2.ORB_create(config.matches)
     keypoints1, descriptors1 = orb.detectAndCompute(im1Gray, None)
     keypoints2, descriptors2 = orb.detectAndCompute(im2Gray, None)
 
@@ -42,11 +42,11 @@ def alignImages(config):
     matches.sort(key=lambda x: x.distance, reverse=False)
 
     # Remove not so good matches
-    numGoodMatches = int(len(matches) * config['top'])
+    numGoodMatches = int(len(matches) * config.top)
     matches = matches[:numGoodMatches]
 
 
-    if config['debug'] == True:
+    if config.debug == True:
 
         # Draw top matches
         imMatches = cv2.drawMatches(im1, keypoints1, im2Gray, keypoints2, matches, None)
@@ -83,17 +83,17 @@ def alignImages(config):
 
     cropped_img = removeBlackBorders(im1Reg)
 
-    cv2.imwrite(config['out'], cropped_img)
+    cv2.imwrite(config.out, cropped_img)
 
-    cv2.imshow(config['out'], cropped_img)
+    cv2.imshow(config.out, cropped_img)
 
     cv2.waitKey(0)
 
-    print(f'Saving image as {config["out"]}')
+    print(f'Saving image as {config.out}')
     print(f'Homography: {h}')
 
-    # print(cropped_img.shape[0])
-    # print(cropped_img.shape[1])
+    print(cropped_img.shape[0])
+    print(cropped_img.shape[1])
     return im1Reg, h
 
 
