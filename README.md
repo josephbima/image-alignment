@@ -36,7 +36,7 @@ And after the aligning image 1 and 2, and then the result into 3 this is the res
 
 _Result from algorithm_
 
-![CP 3](./results_3/cp_al.jpg "Ref 1")
+![CP 3](old_results/results_3/cp_al.jpg "Ref 1")
 
 _Ground truth_
 
@@ -45,34 +45,34 @@ _Ground truth_
 
 Below are more results, first image is from algorithm and second image is the ground truth.
 
-![CP 3](./results_3/snow_al.jpg "Ref 1")
+![CP 3](old_results/results_3/snow_al.jpg "Ref 1")
 ![CP 3](./3-dataset/snow_truth.jpg "Ref 1")
 
-![CP 3](./results_3/seaside_al.jpg "Ref 1")
+![CP 3](old_results/results_3/seaside_al.jpg "Ref 1")
 ![CP 3](./3-dataset/seaside_truth.jpg "Ref 1")
 
-![CP 3](./results_3/house_al.jpg "Ref 1")
+![CP 3](old_results/results_3/house_al.jpg "Ref 1")
 ![CP 3](./3-dataset/house_truth.jpg "Ref 1")
 
-![CP 3](./results_3/city_al.jpg "Ref 1")
+![CP 3](old_results/results_3/city_al.jpg "Ref 1")
 ![CP 3](./3-dataset/city_truth.jpg "Ref 1")
 
-![CP 3](./results_3/desert_al.jpg "Ref 1")
+![CP 3](old_results/results_3/desert_al.jpg "Ref 1")
 ![CP 3](./3-dataset/desert_truth.jpg "Ref 1")
 
-![CP 3](./results_3/field_al.jpg "Ref 1")
+![CP 3](old_results/results_3/field_al.jpg "Ref 1")
 ![CP 3](./3-dataset/field_truth.jpg "Ref 1")
 
-![CP 3](./results_3/forest_al.jpg "Ref 1")
+![CP 3](old_results/results_3/forest_al.jpg "Ref 1")
 ![CP 3](./3-dataset/forest_truth.jpg "Ref 1")
 
-![CP 3](./results_3/hills_al.jpg "Ref 1")
+![CP 3](old_results/results_3/hills_al.jpg "Ref 1")
 ![CP 3](./3-dataset/hills_truth.jpg "Ref 1")
 
-![CP 3](./results_3/library_al.jpg "Ref 1")
+![CP 3](old_results/results_3/library_al.jpg "Ref 1")
 ![CP 3](./3-dataset/library_truth.jpg "Ref 1")
 
-![CP 3](./results_3/mountain_al.jpg "Ref 1")
+![CP 3](old_results/results_3/mountain_al.jpg "Ref 1")
 ![CP 3](./3-dataset/mountain_truth.jpg "Ref 1")
 ##
 

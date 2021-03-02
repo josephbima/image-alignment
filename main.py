@@ -2,7 +2,7 @@ from __future__ import print_function
 import numpy as np
 import cv2
 import argparse
-from utils import sampleImage, removeBlackBorders, getRatio
+from utils import sampleImage, removeBlackBorders, getRatio, get_resolution
 
 
 def alignImages(config):
@@ -11,15 +11,23 @@ def alignImages(config):
     im1 = cv2.imread(config.ref, cv2.IMREAD_COLOR)
     im2 = cv2.imread(config.algn, cv2.IMREAD_COLOR)
 
-    print(im1.shape)
-    print(im2.shape)
+    height = max(im1.shape[0], im2.shape[0])
+    width = max(im1.shape[1], im2.shape[1])
+
+    if im1.shape[1]/im1.shape[0] > im2.shape[1]/im2.shape[0]:
+        use = im1
+        bigger = 1
+    else:
+        use = im2
+        bigger = 2
 
     if im1.shape[1]* im1.shape[0] > im2.shape[1]* im2.shape[0]:
-        height, width, channel = im1.shape
         im2 = cv2.resize(im2, (im1.shape[1], im1.shape[0]), interpolation=cv2.INTER_CUBIC)
+        print('resize 2')
     else:
-        height, width, channel = im2.shape
         im1 = cv2.resize(im1, (im2.shape[1], im2.shape[0]), interpolation=cv2.INTER_CUBIC)
+        print('resize 1')
+
 
 
     # Convert images to grayscale
@@ -31,12 +39,23 @@ def alignImages(config):
 
     # Detect ORB features and compute descriptors.
     orb = cv2.ORB_create(config.matches)
-    keypoints1, descriptors1 = orb.detectAndCompute(im1Gray, None)
-    keypoints2, descriptors2 = orb.detectAndCompute(im2Gray, None)
+    sift = cv2.xfeatures2d_SIFT.create()
+
+    # keypoints1, descriptors1 = orb.detectAndCompute(im1Gray, None)
+    # keypoints2, descriptors2 = orb.detectAndCompute(im2Gray, None)
+
+    keypoints1, descriptors1 = sift.detectAndCompute(im1Gray, None)
+    keypoints2, descriptors2 = sift.detectAndCompute(im2Gray, None)
+
+    print(len(keypoints1))
+    print(len(keypoints2))
 
     # Match features.
-    matcher = cv2.DescriptorMatcher_create(cv2.DESCRIPTOR_MATCHER_BRUTEFORCE_HAMMING)
-    matches = matcher.match(descriptors1, descriptors2, None)
+    # matcher = cv2.DescriptorMatcher_create(cv2.DESCRIPTOR_MATCHER_BRUTEFORCE_HAMMING)
+    # matches = matcher.match(descriptors1, descriptors2, None)
+
+    bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=True)
+    matches = bf.match(descriptors1, descriptors2)
 
     # Sort matches by score
     matches.sort(key=lambda x: x.distance, reverse=False)
@@ -49,10 +68,10 @@ def alignImages(config):
     if config.debug == True:
 
         # Draw top matches
-        imMatches = cv2.drawMatches(im1, keypoints1, im2Gray, keypoints2, matches, None)
+        imMatches = cv2.drawMatches(im1, keypoints1, im2, keypoints2, matches, None)
 
-        im1_kp = cv2.drawKeypoints(im1Gray, keypoints1, None, flags=None)
-        im2_kp = cv2.drawKeypoints(im2Gray, keypoints2, None, flags=None)
+        im1_kp = cv2.drawKeypoints(im1Gray, keypoints1, None)
+        im2_kp = cv2.drawKeypoints(im2Gray, keypoints2, None)
 
         imS1 = cv2.resize(im1_kp, (600, 900))  # Resize image
         imS2 = cv2.resize(im2_kp, (600, 900))  # Resize image
@@ -73,13 +92,22 @@ def alignImages(config):
         points1[i, :] = keypoints1[match.queryIdx].pt
         points2[i, :] = keypoints2[match.trainIdx].pt
 
+    if bigger == 1:
+        p1 = points1
+        p2 = points2
+    else:
+        p1 = points2
+        p2 = points1
+
+    print(bigger)
+
     # Find homography
-    h, mask = cv2.findHomography(points1, points2, cv2.RANSAC)
+    h, mask = cv2.findHomography(p1, p2, cv2.RANSAC)
 
     # Use homography
-    im1Reg = cv2.warpPerspective(im1, h, (1200, 900))
+    im1Reg = cv2.warpPerspective(im1, h, (height, width), flags=cv2.INTER_LINEAR)
 
-    cv2.imshow('with borders', im1Reg)
+    # cv2.imshow('with borders', im1Reg)
 
     cropped_img = removeBlackBorders(im1Reg)
 
@@ -107,7 +135,6 @@ if __name__ == '__main__':
     parser.add_argument('--matches', type=int, default=200)
     parser.add_argument('--top', type=float, default=0.15)
     parser.add_argument('--debug', type=bool, default=False)
-    parser.add_argument('--ratio', type=int, default=1)
 
     config = parser.parse_args()
     print(config)
