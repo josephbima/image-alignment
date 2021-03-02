@@ -27,7 +27,7 @@ def imageCropper(img,x,xd,y,yd):
     crop_img = img[y:yd,x:xd]
     return crop_img
 
-def splitImagesIntoThree(img, name='img', out=''):
+def splitImagesIntoThree(img, name='img', out='', RATIO_1 = 0.25, RATIO_2 = 0.5):
 
     img = cv2.imread(img, cv2.IMREAD_COLOR)
 
@@ -42,8 +42,8 @@ def splitImagesIntoThree(img, name='img', out=''):
     im3 = imageCropper(img, IM3_CONFIG[0], IM3_CONFIG[1], IM3_CONFIG[2], IM3_CONFIG[3])
 
     # Downsample images 2 and 3
-    im2 = sampleImage(im2, ratio=0.25)
-    im3 = sampleImage(im3, ratio=0.5)
+    im2 = sampleImage(im2, ratio=RATIO_1)
+    im3 = sampleImage(im3, ratio=RATIO_2)
 
     # cv2.imshow('crop1', im1)
     # cv2.imshow('crop2', im2)

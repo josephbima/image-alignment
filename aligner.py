@@ -6,6 +6,8 @@ from error_calculation import compare_errors
 import os
 import csv
 
+UPSAMPLE_ARR = [10,2]
+
 class Aligner():
 
     def __init__(self, dir=None, config=None):
@@ -44,17 +46,19 @@ class Aligner():
     out: str
         output string to save image
     """
-    def __solve_img(self, im1, im2, out):
+    def __solve_img(self, im1: object, im2: object, UPSAMPLE_RATIO: int) -> object:
 
         # We want to use the biggest height and the biggest width for our output image
         height = max(im1.shape[0], im2.shape[0])
         width = max(im1.shape[1], im2.shape[1])
 
-        # We want to resize the smaller image to the bigger image to highlight more features
-        if im1.shape[1] * im1.shape[0] > im2.shape[1] * im2.shape[0]:
-            im2 = cv2.resize(im2, (im1.shape[1], im1.shape[0]), interpolation=cv2.INTER_CUBIC)
-        else:
-            im1 = cv2.resize(im1, (im2.shape[1], im2.shape[0]), interpolation=cv2.INTER_CUBIC)
+        # # We want to resize the smaller image to the bigger image to highlight more features
+        # if im1.shape[1] * im1.shape[0] > im2.shape[1] * im2.shape[0]:
+        #     im2 = cv2.resize(im2, (im1.shape[1], im1.shape[0]), interpolation=cv2.INTER_CUBIC)
+        # else:
+        #     im1 = cv2.resize(im1, (im2.shape[1], im2.shape[0]), interpolation=cv2.INTER_CUBIC)
+
+        im2 = sampleImage(im2, UPSAMPLE_RATIO)
 
         # Convert images to grayscale
         im1Gray = cv2.cvtColor(im1, cv2.COLOR_BGR2GRAY)
@@ -88,7 +92,7 @@ class Aligner():
         h, mask = cv2.findHomography(points1, points2, cv2.RANSAC)
 
         # Use homography
-        im1Reg = cv2.warpPerspective(im1, h, (height, width), flags=cv2.INTER_LINEAR)
+        im1Reg = cv2.warpPerspective(im1, h, (1200, 800), flags=cv2.INTER_LINEAR)
 
         # cv2.imshow('with borders', im1Reg)
 
@@ -100,10 +104,10 @@ class Aligner():
 
         return cropped_img
 
-    def solve_images(self, img_arr, out):
-        output_img = self.__solve_img(img_arr[0], img_arr[1], f'{out}_1.jpg')
-        for i in range(1, len(img_arr)):
-            output_img = self.__solve_img(output_img, img_arr[i], f'{out}_{i}.jpg')
+    def solve_images(self, img_arr, out, upsample_ratio):
+        output_img = self.__solve_img(img_arr[0], img_arr[1],upsample_ratio[0])
+        for i in range(2, len(img_arr)):
+            output_img = self.__solve_img(output_img, img_arr[i], upsample_ratio[i-1])
         return output_img
 
     def filename_to_img_arr(self, fn_arr):
@@ -124,7 +128,7 @@ class Aligner():
                     fullpath = (os.path.join(f'{self.dir}/original_images', filename))
                     print(fullpath)
 
-                    splitImagesIntoThree(fullpath, key_name, f'{self.dir}/testing_images')
+                    splitImagesIntoThree(fullpath, key_name, f'{self.dir}/testing_images', RATIO_1=0.1, RATIO_2=0.5)
                     img = cv2.imread(fullpath, cv2.IMREAD_COLOR)
                     crop = imageCropper(img, 218, 777, 232, 594)
 
@@ -137,10 +141,10 @@ class Aligner():
 
         # Run the algorithm on all the files and save them
         for name in file_set:
-            print(name)
+            print(f'Running on : {name}')
             file_solve = [f'{name}_{i}' for i in range(1,4)]
             img_solve = self.filename_to_img_arr(file_solve)
-            output = aligner.solve_images(img_solve, name)
+            output = aligner.solve_images(img_solve, name, UPSAMPLE_ARR)
 
             # Save the image to the correct directory
             cv2.imwrite(os.path.join(f'{self.dir}/result_images/', f'{name}_al.jpg'), output)
@@ -160,6 +164,7 @@ class Aligner():
             total_ssim += s
 
             self.csv_arr.append([f'{self.dir}/truth_images/{name}_truth.jpg', f'{self.dir}/result_images/{name}_al.jpg', mse, s])
+            print(f'Finished, mse: {mse}, ssim: {s} \n')
 
         self.save_csv(total_mse=total_mse,total_ssim=total_ssim,i=len(file_set))
 
@@ -167,9 +172,8 @@ class Aligner():
 
 
 
-aligner = Aligner(dir='./testing-dataset')
+aligner = Aligner(dir='./0.1-testing-ds')
 
-files = ['city_1.jpg', 'city_3.jpg', 'city_2.jpg']
 
 # aligner.solve_images(aligner.filename_to_img_arr(files))
 aligner.test_algorithm()

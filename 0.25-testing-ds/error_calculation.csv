@@ -1,0 +1,13 @@
+ground_truth,generated_img,mse,ssim
+./0.25-testing-ds/truth_images/house_truth.jpg,./0.25-testing-ds/result_images/house_al.jpg,2015.5553029778907,0.2887312158989294
+./0.25-testing-ds/truth_images/seaside_truth.jpg,./0.25-testing-ds/result_images/seaside_al.jpg,371.35404415277213,0.7185579358962744
+./0.25-testing-ds/truth_images/forest_truth.jpg,./0.25-testing-ds/result_images/forest_al.jpg,328.7643466859065,0.787150263604259
+./0.25-testing-ds/truth_images/field_truth.jpg,./0.25-testing-ds/result_images/field_al.jpg,416.7553329577613,0.6855930157247769
+./0.25-testing-ds/truth_images/cp_truth.jpg,./0.25-testing-ds/result_images/cp_al.jpg,223.7626977930203,0.7988203465160946
+./0.25-testing-ds/truth_images/snow_truth.jpg,./0.25-testing-ds/result_images/snow_al.jpg,721.5424808178245,0.6276436986559993
+./0.25-testing-ds/truth_images/beach_truth.jpg,./0.25-testing-ds/result_images/beach_al.jpg,855.3857787763424,0.7156120940550789
+./0.25-testing-ds/truth_images/mountain_truth.jpg,./0.25-testing-ds/result_images/mountain_al.jpg,365.05161479490147,0.6092132104977558
+./0.25-testing-ds/truth_images/hills_truth.jpg,./0.25-testing-ds/result_images/hills_al.jpg,53.10377482810992,0.8225086144797524
+./0.25-testing-ds/truth_images/city_truth.jpg,./0.25-testing-ds/result_images/city_al.jpg,135.52295436800125,0.9349973404276589
+./0.25-testing-ds/truth_images/library_truth.jpg,./0.25-testing-ds/result_images/library_al.jpg,289.500380513743,0.7746543588243284
+total_average,total_average,525.1180644242066,0.7057710995073552

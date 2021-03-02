@@ -116,32 +116,32 @@ def simulate_downsampling(directory):
 # directory = r'./downloads/1200x800 images'
 
 
-total_mse = 0
-total_ssim = 0
-i = 0
-
-csv_arr = [["ground_truth", "generated_img", "mse", "ssim"]]
-
-for filename in os.listdir(directory):
-    if filename.endswith(".jpg"):
-
-        imA = cv2.imread(f'./4-google-datasets/{str(filename)}_truth.jpg')
-        imB = cv2.imread(f'./results_4/{str(filename)}_al.jpg')
-
-        mse, s = compare_errors(imA, imB, title=filename)
-
-        total_mse += mse
-        total_ssim += s
-
-        csv_arr.append([f'{filename}_truth.jpg', f'{filename}_al.jpg', mse, s])
-        # break
-        i += 1
-
-with open('results_4/error_calculation.csv', 'w', newline='') as file:
-    writer = csv.writer(file)
-    for r in csv_arr:
-        writer.writerow(r)
-    writer.writerow(['total_average', 'total_average', total_mse / i, total_ssim / i])
-
-print(f'Mean mse: {total_mse / i}')
-print(f'Mean ssim: {total_ssim / i}')
+# total_mse = 0
+# total_ssim = 0
+# i = 0
+#
+# csv_arr = [["ground_truth", "generated_img", "mse", "ssim"]]
+#
+# for filename in os.listdir(directory):
+#     if filename.endswith(".jpg"):
+#
+#         imA = cv2.imread(f'./4-google-datasets/{str(filename)}_truth.jpg')
+#         imB = cv2.imread(f'./results_4/{str(filename)}_al.jpg')
+#
+#         mse, s = compare_errors(imA, imB, title=filename)
+#
+#         total_mse += mse
+#         total_ssim += s
+#
+#         csv_arr.append([f'{filename}_truth.jpg', f'{filename}_al.jpg', mse, s])
+#         # break
+#         i += 1
+#
+# with open('results_4/error_calculation.csv', 'w', newline='') as file:
+#     writer = csv.writer(file)
+#     for r in csv_arr:
+#         writer.writerow(r)
+#     writer.writerow(['total_average', 'total_average', total_mse / i, total_ssim / i])
+#
+# print(f'Mean mse: {total_mse / i}')
+# print(f'Mean ssim: {total_ssim / i}')
